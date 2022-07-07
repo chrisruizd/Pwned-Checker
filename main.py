@@ -1,20 +1,10 @@
-#the program only checks for password entered in the command line
-"""
-Objectives: 
--Check email, domain names, IP addresses
--Input from user, webpage that ask for the info
--The page gives a litter info of security conserns covered with this project
-- add a favicon: lookup
-"""
 
 from unittest import result
 import requests
 import hashlib
 import sys
-
 from flask import Flask, render_template, url_for, request, redirect
 import csv
-
 
 def request_api_data(query_char):
   url = 'https://api.pwnedpasswords.com/range/' + query_char
@@ -30,7 +20,6 @@ def get_password_leaks_count(hashes, hash_to_check):
       return count
   return 0
 
-#This funct hashes the pasword with SHA-1, Splitps the hashed password, checks the response
 def pwned_api_check(password):
   sha1password = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
   first5_char, tail = sha1password[:5], sha1password[5:]
@@ -45,11 +34,6 @@ def main(password):
   else:
     return (f'{password} was NOT found. Carry on!')
   
-  
-
-#________________________
-
-
 
 app = Flask(__name__)
 
@@ -58,19 +42,16 @@ def my_home():
     return render_template('login.html')
     print()
 
-
 @app.route('/checked', methods=['POST', 'GET'])
 def psw_checked():
   password = request.form['password'] #putting password entered by user into a variable, request.args is for get, request.form is for post
   print('\n'+password + '\n')
   print(type(password))
-  result= main(password)  #I want to return if hacked, times??
+  result= main(password)  
   return render_template('checked.html', result=result)
 
 if __name__ == '__main__':
-  app.run(debug=True)  # Change
-
-#_______
+  app.run(debug=True)  
 
 
 
